@@ -4,6 +4,9 @@ import net.lzzy.practicesonline.activities.constants.DbConstants;
 import net.lzzy.practicesonline.activities.utils.AppUtils;
 import net.lzzy.sqllib.SqlRepository;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -20,7 +23,7 @@ public class FavoriteFactory {
     }
 
     private FavoriteFactory(){
-        repository = new SqlRepository<>(AppUtils.getContext(), Favorite.class, DbConstants.packager);
+        repository = new SqlRepository<>(AppUtils.getContext(),Favorite.class, DbConstants.packager);
     }
 
     private Favorite getByQuestion(String questionId) {
@@ -55,7 +58,17 @@ public class FavoriteFactory {
     public void starQuestion(UUID questionId){
         Favorite favorite = getByQuestion(questionId.toString());
         if(favorite == null){
-            favorite = new Favorite();
+            favorite = new Favorite() {
+                @Override
+                public JSONObject toJson() throws JSONException {
+                    return null;
+                }
+
+                @Override
+                public void fromJson(JSONObject json) throws JSONException {
+
+                }
+            };
             favorite.setQuestionId(questionId);
             repository.insert(favorite);
         }

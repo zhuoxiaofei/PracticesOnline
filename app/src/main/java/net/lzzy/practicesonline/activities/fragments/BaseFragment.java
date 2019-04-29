@@ -1,5 +1,6 @@
 package net.lzzy.practicesonline.activities.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,8 @@ import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
+import net.lzzy.practicesonline.activities.utils.AppUtils;
 
 import java.util.Objects;
 
@@ -38,9 +41,18 @@ public abstract class BaseFragment extends Fragment {
      *
      **/
 
+    @Nullable
+    @Override
+    public Context getContext(){
+        Context context = getActivity();
+        if(context == null){
+            context = AppUtils.getContext();
+        }
+        return context;
+    }
     protected abstract void populate();
 
-    public abstract int getLayoutRes();
+    protected abstract int getLayoutRes();
 
     <T extends View> T find(@IdRes int id) {
 
