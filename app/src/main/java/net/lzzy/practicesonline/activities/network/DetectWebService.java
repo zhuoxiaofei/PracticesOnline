@@ -63,7 +63,7 @@ public class DetectWebService extends Service {
         }
 
         private void notifyUser(String info, int icon, boolean refresh) {
-            Intent intent = new Intent(DetectWebService.this, PracticesActivity.class);
+            Intent intent = new Intent(DetectWebService.this,PracticesActivity.class);
             intent.putExtra(EXTRA_REFRESH,refresh);
             PendingIntent pendingIntent = PendingIntent.getActivity(DetectWebService.this,
                     0,intent,PendingIntent.FLAG_ONE_SHOT);

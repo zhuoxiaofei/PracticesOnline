@@ -1,6 +1,7 @@
 package net.lzzy.practicesonline.activities.models;
 
 import net.lzzy.practicesonline.activities.constants.ApiConstants;
+import net.lzzy.practicesonline.activities.models.view.QuestionType;
 import net.lzzy.practicesonline.activities.network.QuestionService;
 import net.lzzy.sqllib.Ignored;
 import net.lzzy.sqllib.Jsonable;

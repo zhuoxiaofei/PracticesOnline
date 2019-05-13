@@ -118,7 +118,7 @@ public class SplashActivity extends BaseActivity implements SplashFragment.OnSpl
    }
 
     public void gotoMain(){
-        startActivity(new Intent(this,PracticesActivity.class));
+        startActivity(new Intent(this, PracticesActivity.class));
         finish();
     }
 

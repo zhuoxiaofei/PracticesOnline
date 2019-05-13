@@ -1,4 +1,4 @@
-package net.lzzy.practicesonline.activities.models;
+package net.lzzy.practicesonline.activities.models.view;
 
 /**
  * @author lzzy_gxy on 2019/4/16.

@@ -23,7 +23,7 @@ public class FavoriteFactory {
     }
 
     private FavoriteFactory(){
-        repository = new SqlRepository<>(AppUtils.getContext(),Favorite.class, DbConstants.packager);
+        repository = new SqlRepository<>(AppUtils.getContext(), Favorite.class, DbConstants.packager);
     }
 
     private Favorite getByQuestion(String questionId) {

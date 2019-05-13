@@ -200,7 +200,7 @@ public class PracticesFragment extends BaseFragment {
             PracticesFragment fragment=this.fragment.get();
             QuestionFactory factory= QuestionFactory.getInstance();
             try {
-                List<Question> questions= QuestionService.getQuestions(s,practice.getId());
+                List<Question> questions=QuestionService.getQuestions(s,practice.getId());
                 for (Question question:questions){
                     factory.insert(question);
                 }

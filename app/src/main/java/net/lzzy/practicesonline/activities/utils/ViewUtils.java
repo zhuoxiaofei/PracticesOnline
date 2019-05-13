@@ -39,6 +39,16 @@ public class ViewUtils {
             dialog.dismiss();
         }
     }
+
+    public static int dp2px(int pxValue, Context context){
+        float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (pxValue / scale +0.5f);
+    }
+
+    public static int px2dx(int pxValue, Context context){
+        float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (pxValue / scale +0.5f);
+    }
     public static void gotoSetting(Context context){
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_setting,null);
         Pair<String,String> url = AppUtils.loadServerSetting(context);

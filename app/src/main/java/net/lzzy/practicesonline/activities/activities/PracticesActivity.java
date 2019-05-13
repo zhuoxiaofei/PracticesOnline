@@ -52,7 +52,7 @@ public class PracticesActivity extends BaseActivity implements PracticesFragment
             }
         };
         int localCount = PracticeFactory.getInstance().get().size();
-        Intent intent = new Intent(this,DetectWebService.class);
+        Intent intent = new Intent(this, DetectWebService.class);
         intent.putExtra(EXTRA_LOCAL_COUNT,localCount);
         bindService(intent,connection,BIND_AUTO_CREATE);
     }
@@ -117,7 +117,7 @@ public class PracticesActivity extends BaseActivity implements PracticesFragment
 
     @Override
     public void onPracticeSelected(String practiceId, int apiId) {
-        Intent instant = new Intent(this, QuestionActivity.class);
+        Intent instant = new Intent(this,QuestionActivity.class);
         instant.putExtra(EXTRA_PRACTICE_ID,practiceId);
         instant.putExtra(EXTRA_API_ID,apiId);
         startActivity(instant);
