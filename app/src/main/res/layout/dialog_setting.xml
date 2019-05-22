@@ -2,14 +2,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_margin="10dp">
-    <EditText android:id="@+id/dialog_setting_edt_ip"
+    android:layout_height="match_parent">
+
+    <EditText
+        android:id="@+id/dialog_setting_edt_ip"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="请输入服务器地址"/>
-    <EditText android:id="@+id/dialog_setting_edt_port"
+        android:hint="服务器地址"/>
+    <EditText
+        android:id="@+id/dialog_setting_edt_port"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="请输入端口号"/>
+        android:hint="服务器端口"/>
+
 </LinearLayout>

@@ -1,6 +1,7 @@
 package net.lzzy.practicesonline.activities.models;
 
 import net.lzzy.practicesonline.activities.constants.ApiConstants;
+import net.lzzy.sqllib.Ignored;
 import net.lzzy.sqllib.Jsonable;
 import net.lzzy.sqllib.Sqlitable;
 
@@ -10,16 +11,17 @@ import org.json.JSONObject;
 import java.util.UUID;
 
 /**
- * @author lzzy_gxy on 2019/4/16.
+ * Created by lzzy_gxy on 2019/4/16.
  * Description:
  */
-public  class Option extends BaseEntity implements Sqlitable, Jsonable {
-    public static final String COL_QUESTION_ID = "questionId";
+public class Option extends BaseEntity implements Sqlitable, Jsonable {
+    @Ignored
+    public static final String COL_QUESTION_ID="questionId";
     private String content;
     private String label;
     private UUID questionId;
     private boolean isAnswer;
-    private int apiId;
+    private int apild;
 
     public String getContent() {
         return content;
@@ -53,14 +55,13 @@ public  class Option extends BaseEntity implements Sqlitable, Jsonable {
         isAnswer = answer;
     }
 
-    public int getApiId() {
-        return apiId;
+    public int getApild() {
+        return apild;
     }
 
-    public void setApiId(int apiId) {
-        this.apiId = apiId;
+    public void setApild(int apild) {
+        this.apild = apild;
     }
-
 
     @Override
     public boolean needUpdate() {
@@ -74,8 +75,8 @@ public  class Option extends BaseEntity implements Sqlitable, Jsonable {
 
     @Override
     public void fromJson(JSONObject json) throws JSONException {
-        content = json.getString(ApiConstants.JSON_OPTION_CONTENT);
-        label = json.getString(ApiConstants.JSON_OPTION_LABEL);
-        apiId = json.getInt(ApiConstants.JSON_OPTION_ARI_ID);
+        content= json.getString(ApiConstants.JSON_OPTION_CONTENT);
+        label=json.getString(ApiConstants.JSON_OPTION_LABEL);
+        apild=json.getInt(ApiConstants.JSON_OPTION_API_ID);
     }
 }

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <net.lzzy.practicesonline.activities.fragments.BarChartView
+        android:id="@+id/fragment_analysis_bar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="70dp"/>
+
+    <TextView
+        android:id="@+id/fragment_analysis_tv"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_gravity="bottom|end"
+        android:background="@drawable/grid_result"
+        android:textSize="@dimen/thirtySp"
+        android:gravity="center"
+        android:layout_marginEnd="@dimen/fifteenDp"
+        android:text="表"/>
+
+</FrameLayout>

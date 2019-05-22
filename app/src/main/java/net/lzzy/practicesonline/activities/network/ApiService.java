@@ -22,24 +22,22 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 /**
- * @author lzzy_gxy on 2019/4/19.
+ * Created by lzzy_gxy on 2019/4/19.
  * Description:
  */
 public class ApiService {
-
-    private static final OkHttpClient CLIENT = new OkHttpClient();
-
-    public String get(String address) throws IOException {
-        URL url = new URL(address);
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+    private static final OkHttpClient CLIENT=new OkHttpClient();
+    public static String get(String address) throws IOException {
+        URL url=new URL(address);
+        HttpURLConnection conn= (HttpURLConnection) url.openConnection();
         try {
             conn.setRequestMethod("GET");
-            conn.setConnectTimeout(6 * 1000);
-            conn.setReadTimeout(6 * 1000);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            StringBuilder builder = new StringBuilder();
+            conn.setConnectTimeout(6*1000);
+            conn.setReadTimeout(6*1000);
+            BufferedReader reader=new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            StringBuilder builder=new StringBuilder();
             String line;
-            while ((line = reader.readLine()) != null){
+            while ((line=reader.readLine())!=null){
                 builder.append(line).append("\n");
             }
             reader.close();
@@ -47,92 +45,98 @@ public class ApiService {
         }finally {
             conn.disconnect();
         }
+        //todo:1.HttpURLConnection get
     }
 
-    public void post(String address, JSONObject json) throws IOException{
-        URL url = new URL(address);
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("POST");
-        conn.setDoOutput(true);
-        conn.setChunkedStreamingMode(0);
-        conn.setRequestProperty("Content-Length","application/json");
-        byte[] data = json.toString().getBytes(StandardCharsets.UTF_8);
-        conn.setRequestProperty("Content-Length",String.valueOf(data.length));
-        conn.setUseCaches(false);
-        try (OutputStream stream = conn.getOutputStream()){
-            stream.write(data);
-            stream.flush();
-        }finally {
+    public static void post(String address, JSONObject json) throws IOException {
+        URL url=new URL(address);
+        HttpURLConnection conn= (HttpURLConnection) url.openConnection();
+
+            conn.setRequestMethod("POST");
+            conn.setDoOutput(true);
+            conn.setChunkedStreamingMode(0);
+            conn.setRequestProperty("Content-Type","application/json");
+            byte[] data=json.toString().getBytes(StandardCharsets.UTF_8);
+            conn.setRequestProperty("Content-Length", String.valueOf(data.length));
+            conn.setUseCaches(false);
+            try (OutputStream stream=conn.getOutputStream()){
+                //写入数据
+                stream.write(data);
+                stream.flush();
+            }finally {
             conn.disconnect();
         }
+        //todo:2.HttpURLConnection post
     }
 
-    public static String okGet(String address) throws IOException{
-        Request request = new Request.Builder().url(address).build();
-        try (Response response = CLIENT.newCall(request).execute()){
+    public static String okGet(String address) throws IOException {
+        Request request= new Request.Builder().url(address).build();
+        try(Response response=CLIENT.newCall(request).execute()) {
             if (response.isSuccessful()){
                 return response.body().string();
             }else {
-                throw new IOException("错误码:" + response.code());
+                throw new IOException("错误码"+response.code());
             }
+
+
         }
     }
-
-
-    public static String okGet(String address, String args, HashMap<String,Object>headers) throws IOException{
-        if(!TextUtils.isEmpty(args)){
-            address = address.concat("?").concat(args);
+    public static String okGet(String address, String args, HashMap<String,Object> headers)throws IOException{
+        if (!TextUtils.isEmpty(args)){
+            address=address.concat("?").concat(args);
         }
-        Request.Builder builder = new Request.Builder().url(address);
-        if(headers != null && headers.size() > 0){
-            for (Object o : headers.entrySet()){
-                Map.Entry entry = (Map.Entry) o;
-                String key = entry.getKey().toString();
-                Object val = entry.getValue();
-                if(val instanceof String){
-                    builder = builder.header(key,val.toString());
-                }else if (val instanceof List){
-                    for (String v : ApiService.<List<String>>cast(val)){
-                        builder = builder.addHeader(key,v);
+        Request.Builder builder=new Request.Builder().url(address);
+        if (headers!=null&&headers.size()>0){
+            for (Object o:headers.entrySet()){
+                Map.Entry entry= (Map.Entry) o;
+                String key=entry.getKey().toString();
+                Object val=entry.getValue();
+                if (val instanceof String){
+                    builder=builder.header(key,val.toString());
+                }else if(val instanceof List){
+                    for (String v: ApiService.<List<String>>cast(val)){
+                        builder=builder.header(key,v);
                     }
+
                 }
             }
         }
-        Request request = builder.build();
-        try(Response response = CLIENT.newCall(request).execute()){
-            if(response.isSuccessful()){
+        Request request=builder.build();
+        try(Response response=CLIENT.newCall(request).execute()) {
+            if (response.isSuccessful()){
                 return response.body().string();
             }else {
-                throw new IOException("错误码：" + response.code());
+                throw new IOException("错误码:"+response.code());
             }
         }
     }
-
     @SuppressWarnings("unchecked")
-    public static <T> T cast(Object obj){
+    private static <T> T cast(Object obj){
         return (T) obj;
     }
 
-    public static int okPost(String address, JSONObject json) throws IOException{
-        RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"),
+
+    public static int okPost(String address,JSONObject json) throws IOException {
+        RequestBody body=RequestBody.create(MediaType.parse("application/json; charset=utf-8"),
                 json.toString());
-        Request request = new Request.Builder()
+        Request request=new Request.Builder()
                 .url(address)
                 .post(body)
                 .build();
-        try(Response response = CLIENT.newCall(request).execute()){
+        try(Response response=CLIENT.newCall(request).execute()) {
             return response.code();
         }
     }
 
-    public static String okRequest(String address, JSONObject json) throws IOException{
-        RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"),
+
+    public  String okRequest(String address,JSONObject json) throws IOException {
+        RequestBody body=RequestBody.create(MediaType.parse("application/json; charset=utf-8"),
                 json.toString());
-        Request request = new Request.Builder()
+        Request request=new Request.Builder()
                 .url(address)
                 .post(body)
                 .build();
-        try(Response response = CLIENT.newCall(request).execute()){
+        try(Response response=CLIENT.newCall(request).execute()) {
             return response.body().string();
         }
     }

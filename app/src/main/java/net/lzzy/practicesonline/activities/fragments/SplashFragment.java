@@ -14,13 +14,12 @@ import java.util.Calendar;
  * Description:
  */
 public class SplashFragment extends BaseFragment {
-    private int[] imgs=new  int[]{R.drawable.splash1, R.drawable.splash2, R.drawable.splash3};
-    private OnSplashFinishedListener listener;
-
+    private int[] imgs=new int[]{R.drawable.splash1, R.drawable.splash2, R.drawable.splash3};
+    private OnSpalshFinishedListener listener;
     @Override
     protected void populate() {
-        View wall= find(R.id.fragment_splash_wall);
-        int pos= Calendar.getInstance().get(Calendar.SECOND)% 3;
+        View wall=find(R.id.fragment_splash_wall);
+        int pos= Calendar.getInstance().get(Calendar.SECOND) % 3;
         wall.setBackgroundResource(imgs[pos]);
         wall.setOnClickListener(v -> listener.cancelCount());
 
@@ -29,7 +28,6 @@ public class SplashFragment extends BaseFragment {
     @Override
     public int getLayoutRes() {
         return R.layout.fragment_splash;
-
     }
 
     @Override
@@ -39,23 +37,21 @@ public class SplashFragment extends BaseFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnSplashFinishedListener){
-            listener = (OnSplashFinishedListener)context;
-        }else {
-            throw new ClassCastException(context.toString()+"必须实现OnSplashFinishedListener");
+        try{
+            listener= (OnSpalshFinishedListener) context;
+        }catch (ClassCastException e){
+            throw new ClassCastException(context.toString()+"必须实现OnCinemaSelectedListener接口");
         }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        listener = null;
+        listener=null;
     }
 
 
-
-    public  interface OnSplashFinishedListener{
-        void  cancelCount();
-
+    public interface OnSpalshFinishedListener{
+        void cancelCount();
     }
 }

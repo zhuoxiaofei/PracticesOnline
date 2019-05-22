@@ -15,7 +15,9 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Created by lzzy_gxy on 2019/4/16.
+ *
+ * @author lzzy_gxy
+ * @date 2019/4/16
  * Description:
  */
 public class Question extends BaseEntity implements Sqlitable, Jsonable {
@@ -31,7 +33,7 @@ public class Question extends BaseEntity implements Sqlitable, Jsonable {
     private List<Option> options;
 
     public Question(){
-        options=new ArrayList<>();
+        options= new ArrayList<>();
     }
 
     public String getContent() {
@@ -46,17 +48,13 @@ public class Question extends BaseEntity implements Sqlitable, Jsonable {
         return type;
     }
 
-    public void setType(QuestionType type) {
-        this.type = type;
-    }
-
     public int getDbType() {
         return dbType;
     }
 
     public void setDbType(int dbType) {
         this.dbType = dbType;
-        type= QuestionType.getInstance(dbType);
+        type=QuestionType.getInstance(dbType);
     }
 
     public String getAnalysis() {
@@ -90,7 +88,7 @@ public class Question extends BaseEntity implements Sqlitable, Jsonable {
     }
 
     @Override
-    public JSONObject toJson() {
+    public JSONObject toJson() throws JSONException {
         return null;
     }
 
@@ -99,15 +97,15 @@ public class Question extends BaseEntity implements Sqlitable, Jsonable {
         analysis=json.getString(ApiConstants.JSON_QUESTION_ANALYSIS);
         content=json.getString(ApiConstants.JSON_QUESTION_CONTENT);
         setDbType(json.getInt(ApiConstants.JSON_QUESTION_TYPE));
-        String strOptions=json.getString(ApiConstants.JSON_QUESTION_OPTIONS);
+        String strOption= json.getString(ApiConstants.JSON_QUESTION_OPTIONS);
         String strAnswers=json.getString(ApiConstants.JSON_QUESTION_ANSWER);
         try {
-            List<Option> options= QuestionService.getOptionsFromJson(strOptions,strAnswers);
+            List<Option> options= QuestionService.getOptionsFromJson(strOption,strAnswers);
             for (Option option:options){
                 option.setQuestionId(id);
             }
             setOptions(options);
-        }catch (InstantiationException|IllegalAccessException e){
+        }catch (IllegalAccessException|InstantiationException e){
             e.printStackTrace();
         }
     }

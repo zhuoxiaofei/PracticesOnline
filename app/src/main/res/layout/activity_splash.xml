@@ -1,34 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.activities.SplashActivity">
 
-    <FrameLayout android:id="@+id/fragment_splash_container"
+    <FrameLayout
+        android:id="@+id/fragment_splash_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:background="@drawable/splash1">
+    </FrameLayout>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="16dp">
-        <TextView android:id="@+id/activity_splash_tv_copy_right"
+        android:padding="@dimen/fifteenDp">
+        <TextView
+            android:id="@+id/activity_splash_tv_copy_right"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
+           android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:text="by lzzy.gxy"
             android:textColor="@android:color/white"
-            android:textSize="11dp"/>
-        <TextView android:id="@+id/activity_splash_tv_count_down"
-            android:layout_width="@dimen/circleRadius"
-            android:layout_height="@dimen/circleRadius"
+            android:textSize="@dimen/twentyDp"
+            android:text="by.lzzy.hzq"/>
+
+        <TextView
+            android:id="@+id/activity_splash_tv_count_down"
+            android:layout_width="@dimen/fiftyDp"
+            android:layout_height="@dimen/fiftyDp"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
-            android:background="@drawable/tv_circle_style"
+            android:background="@drawable/bg_circle"
             android:gravity="center"
-            android:textSize="15sp"
-            tools:text="5秒"/>
+            android:textSize="@dimen/twentyDp"
+            android:hint="9秒"/>
+
     </RelativeLayout>
 
 </FrameLayout>

@@ -2,7 +2,7 @@ package net.lzzy.practicesonline.activities.network;
 
 import net.lzzy.practicesonline.activities.constants.ApiConstants;
 import net.lzzy.practicesonline.activities.models.Practice;
-import net.lzzy.practicesonline.activities.models.view.PracticeResult;
+import net.lzzy.practicesonline.activities.models.view.PracticeReult;
 import net.lzzy.sqllib.JsonConverter;
 
 import org.json.JSONException;
@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * @author lzzy_gxy on 2019/4/22.
+ * Created by lzzy_gxy on 2019/4/22.
  * Description:
  */
 public class PracticeService {
@@ -20,11 +20,11 @@ public class PracticeService {
     }
 
     public static List<Practice> getPractices(String json) throws IllegalAccessException, JSONException, InstantiationException {
-        JsonConverter<Practice> converter = new JsonConverter<Practice>(Practice.class);
+        JsonConverter<Practice> converter=new JsonConverter<>(Practice.class);
         return converter.getArray(json);
     }
 
-    public static int postResult(PracticeResult result) throws JSONException, IOException {
-        return ApiService.okPost(ApiConstants.URL_RESULT,result.toJson());
+    public static int postResult(PracticeReult reult) throws IOException, JSONException {
+        return ApiService.okPost(ApiConstants.URL_RESULT,reult.toJson());
     }
 }

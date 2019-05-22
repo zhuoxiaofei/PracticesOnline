@@ -25,28 +25,30 @@ import net.lzzy.practicesonline.activities.models.view.QuestionType;
 import java.util.List;
 
 /**
- * @author lzzy_gxy on 2019/4/30.
+ *
+ * @author lzzy_gxy
+ * @date 2019/4/26
  * Description:
  */
-public class QuestionFragment extends BaseFragment{
-    private static final String ARG_QUESTION_ID = "argQuestionId";
-    private static final String ARG_POS = "argPos";
-    private static final String ARG_IS_COMMITTED = "argIsCommitted";
+public class QuestionFragment extends BaseFragment {
+    public static final String ARGS_QUESTION_ID = "argsQuestionId";
+    public static final String ARGS_POS = "argsPos";
+    public static final String ARGS_ISCOMMITTED = "argsIscommitted";
     private Question question;
     private int pos;
-    private boolean isCommitted;
+    private boolean iscommitted;
+    private boolean isMulti=false;
     private TextView tvType;
-    private ImageButton imgFavorite;
-    private TextView tvContent;
-    private RadioGroup rgOptions;
-    private boolean isMulti = false;
+    private ImageButton imageButton;
+    private RadioGroup group;
+    private TextView tvGray;
 
-    public static QuestionFragment newInstance(String questionId, int pos, boolean isCommitted){
-        QuestionFragment fragment =new QuestionFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_QUESTION_ID, questionId);
-        args.putInt(ARG_POS, pos);
-        args.putBoolean(ARG_IS_COMMITTED, isCommitted);
+    public static QuestionFragment newInstance(String questionId, int pos, boolean iscommitted){
+        QuestionFragment fragment=new QuestionFragment();
+        Bundle args=new Bundle();
+        args.putString(ARGS_QUESTION_ID,questionId);
+        args.putInt(ARGS_POS,pos);
+        args.putBoolean(ARGS_ISCOMMITTED,iscommitted);
         fragment.setArguments(args);
         return fragment;
     }
@@ -54,97 +56,106 @@ public class QuestionFragment extends BaseFragment{
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null){
-            pos = getArguments().getInt(ARG_POS);
-            isCommitted = getArguments().getBoolean(ARG_IS_COMMITTED);
-            question = QuestionFactory.getInstance().getById(getArguments().getString(ARG_QUESTION_ID));
+        if (getArguments()!=null){
+            pos=getArguments().getInt(ARGS_POS);
+            iscommitted=getArguments().getBoolean(ARGS_ISCOMMITTED);
+            question= QuestionFactory.getInstance().getById(getArguments().getString(ARGS_QUESTION_ID));
         }
     }
 
-
     @Override
     protected void populate() {
-        //find views
-        initViews();
-        //显示题目内容
-        displayQuestion();
-        //生成选项
-        generateOptions();
-    }
+        //题目类型
+        tvType = find(R.id.fragment_question_tv_type);
+        //收藏标志
+        imageButton = find(R.id.fragment_question_img_favorite);
+        //题目
+        tvGray = find(R.id.fragment_question_tv_content);
+        //选项
+        group = find(R.id.fragment_question_option_content);
+        if (iscommitted){
+            group.setOnClickListener(v -> new AlertDialog.Builder(getContext())
+                    .setMessage(question.getAnalysis())
+            .show());
+        }
 
-    private void generateOptions() {
-        List<Option> options = question.getOptions();
-        for (Option option : options){
-            CompoundButton btn = isMulti ? new CheckBox(getContext()) : new RadioButton(getContext());
-            String content = option.getLabel() + "." + option.getContent();
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
-                btn.setButtonTintList(ColorStateList.valueOf(Color.GRAY));
+        //显示题目类型与收藏标志
+        displayOption();
+        //显示题目和选项
+        generateOption();
+
+    }
+    /**显示题目和选项*/
+    private void generateOption() {
+        isMulti=question.getType()== QuestionType.MULTI_CHOICE;
+        String qAnalysis=question.getAnalysis();
+        tvGray.setText(qAnalysis);
+        List<Option> options=question.getOptions();
+        for (Option option:options){
+            CompoundButton button=isMulti? new CheckBox(getContext()):new RadioButton(getContext());
+            String content=option.getLabel()+"."+option.getContent();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                //设置选项控件颜色
+                button.setButtonTintList(ColorStateList.valueOf(Color.GRAY));
             }
-            btn.setText(content);
-            btn.setEnabled(!isCommitted);
-            btn.setOnCheckedChangeListener((buttonView, isChecked) ->
-                    UserCookies.getInstance().changeOptionState(option,isChecked,isMulti));
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-                btn.setTextAppearance(R.style.NormalText);
+            button.setText(content);
+            button.setEnabled(!iscommitted);
+            button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    //保存选中的选项
+                    UserCookies.getInstance().changeOptionState(option,isChecked,isMulti);
+                }
+            });
+            //设置选项字体大小和颜色
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                button.setTextAppearance(R.style.styleText);
             }
-            rgOptions.addView(btn);
-            //勾选，到文件中找是否存在该选项的id，存在则勾选
-            boolean shouldCheck = UserCookies.getInstance().isOptionSelected(option);
+            group.addView(button);
+            //region读取选中的选项
+            boolean shouldCheck= UserCookies.getInstance().isOptionSelected(option);
             if (isMulti){
-                btn.setChecked(shouldCheck);
+                button.setChecked(shouldCheck);
             }else if (shouldCheck){
-                rgOptions.check(btn.getId());
+                group.check(button.getId());
             }
-            if (isCommitted && option.isAnswer()){
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-                    btn.setTextColor(getResources().getColor(R.color.colorGreen,null));
+            //endregion
+            if (iscommitted&&option.isAnswer()){
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    button.setTextColor(getResources().getColor(R.color.colorGreen,null));
                 }else {
-                    btn.setTextColor(getResources().getColor(R.color.colorGreen));
+                    button.setTextColor(getResources().getColor(R.color.colorGreen));
                 }
             }
         }
     }
-
-    private void displayQuestion() {
-
-        int label = pos + 1;
-        String qType = label + "." + question.getType().toString();
+    /**显示题目类型与收藏标志*/
+    private void displayOption() {
+        int label=pos+1;
+        String qType=label+"."+question.getType().toString();
         tvType.setText(qType);
-        tvContent.setText(question.getContent());
-        int starId = FavoriteFactory.getInstance().isQuestionStarred(question.getId().toString()) ?
+        int starId= FavoriteFactory.getInstance().isQuestionStarred(question.getId().toString())?
                 android.R.drawable.star_on : android.R.drawable.star_off;
-        imgFavorite.setImageResource(starId);
-        imgFavorite.setOnClickListener(v -> switchStar());
-    }
+        imageButton.setImageResource(starId);
 
+        //点击收藏，取消收藏
+        imageButton.setOnClickListener(v -> switchStar());
+    }
+    /**点击收藏，取消收藏*/
     private void switchStar() {
-        FavoriteFactory factory = FavoriteFactory.getInstance();
+        FavoriteFactory factory= FavoriteFactory.getInstance();
         if (factory.isQuestionStarred(question.getId().toString())){
             factory.cancelStarQuestion(question.getId());
-            imgFavorite.setImageResource(android.R.drawable.star_off);
+            imageButton.setImageResource(android.R.drawable.star_off);
         }else {
             factory.starQuestion(question.getId());
-            imgFavorite.setImageResource(android.R.drawable.star_on);
-        }
-    }
-
-    private void initViews() {
-        isMulti=question.getType()== QuestionType.MULTI_CHOICE;
-        tvType = find(R.id.fragment_question_tv_type);
-        imgFavorite = find(R.id.fragment_question_img_favorite);
-        tvContent = find(R.id.fragment_question_tv_content);
-        rgOptions = find(R.id.fragment_question_option_container);
-        if (isCommitted){
-            rgOptions.setOnClickListener(v ->
-                    new AlertDialog.Builder(getContext())
-            .setMessage(question.getAnalysis())
-            .show());
+            imageButton.setImageResource(android.R.drawable.star_on);
         }
     }
 
     @Override
-    protected int getLayoutRes() {
-        return R.layout.fragment_question;
+    public int getLayoutRes() {
+        return R.layout.question_fragment;
     }
 
     @Override

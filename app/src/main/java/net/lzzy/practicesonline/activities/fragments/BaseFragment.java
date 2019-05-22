@@ -1,20 +1,15 @@
 package net.lzzy.practicesonline.activities.fragments;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import net.lzzy.practicesonline.activities.utils.AppUtils;
-
 import java.util.Objects;
-
 
 /**
  *
@@ -23,41 +18,34 @@ import java.util.Objects;
  * Description:
  */
 public abstract class BaseFragment extends Fragment {
-    public BaseFragment() {
-    }
+    public BaseFragment(){}
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(getLayoutRes(), container, false);
+        return inflater.inflate(getLayoutRes(),container,false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         populate();
     }
+    /**
+     *执行onCreateView中初始化视图组件、填充数据任务
+     */
+    protected abstract void populate();
+    /**
+     * 获取视图组件
+     */
+    public abstract int getLayoutRes();
 
     /**
-     *
-     **/
-
-    @Nullable
-    @Override
-    public Context getContext(){
-        Context context = getActivity();
-        if(context == null){
-            context = AppUtils.getContext();
-        }
-        return context;
-    }
-    protected abstract void populate();
-
-    protected abstract int getLayoutRes();
-
-    <T extends View> T find(@IdRes int id) {
-
+    * 获取视图组件id
+    */
+    <T extends View> T find(int id){
         return Objects.requireNonNull(getView()).findViewById(id);
     }
 
     public abstract void search(String kw);
+
 }
